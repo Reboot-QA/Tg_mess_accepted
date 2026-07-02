@@ -1,0 +1,40 @@
+# 复制此文件为 config.yaml 并填写真实配置
+
+telegram:
+  api_id: 12345678
+  api_hash: "your_api_hash"
+  session_name: "telegram_session"
+  # Docker 部署请改为: "data/sessions/telegram_session"
+
+  watch_chats: []
+  keywords: []
+
+  proxy:
+    enabled: false
+    type: "socks5"
+    host: "127.0.0.1"
+    port: 1080
+    username: ""
+    password: ""
+
+# 推送方式（三选一，改 provider 即可）
+push:
+  # wecom     = 企业微信群机器人（完全免费，推荐）
+  # serverchan = Server酱（免费，每天 5 条）
+  # pushplus  = PushPlus（需实名认证）
+  provider: "wecom"
+
+  wecom:
+    webhook: "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=YOUR_KEY"
+
+  serverchan:
+    sendkey: "your_sendkey"
+
+  pushplus:
+    token: "your_pushplus_token"
+    template: "html"
+
+app:
+  cooldown_seconds: 3
+  log_file: "logs/push.log"
+  # Docker 部署请改为: "data/logs/push.log"

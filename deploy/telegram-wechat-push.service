@@ -1,0 +1,21 @@
+[Unit]
+Description=Telegram to WeChat Push Monitor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__USER__
+Group=__USER__
+WorkingDirectory=__WORKDIR__
+ExecStart=__WORKDIR__/venv/bin/python monitor.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# 避免 session 文件权限问题
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

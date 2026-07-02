@@ -1,0 +1,29 @@
+services:
+  monitor:
+    build: .
+    container_name: telegram-wechat-push
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+    # 国内服务器若连不上 Telegram，取消下行注释使用宿主机代理
+    # network_mode: host
+
+  # 首次 Telegram 登录（交互式，只需运行一次）
+  login:
+    profiles: ["login"]
+    build: .
+    container_name: telegram-wechat-login
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./data:/app/data
+    command: ["python", "monitor.py"]
+    # network_mode: host
+
+  # 测试推送通道
+  test:
+    profiles: ["test"]
+    build: .
+    volumes:
+      - ./data:/app/data
+    command: ["python", "test_push.py"]

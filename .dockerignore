@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+*.session
+*.session-journal
+.git/
+data/config.yaml
+data/logs/
+data/sessions/
+logs/
+.env
+*.bat

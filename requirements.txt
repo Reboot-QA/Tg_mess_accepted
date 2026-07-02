@@ -1,0 +1,4 @@
+telethon>=1.36.0
+requests>=2.31.0
+pyyaml>=6.0.1
+PySocks>=1.7.1
