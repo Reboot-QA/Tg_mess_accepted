@@ -36,5 +36,6 @@ push:
 
 app:
   cooldown_seconds: 3
+  reconnect_delay_seconds: 10
   log_file: "logs/push.log"
   # Docker 部署请改为: "data/logs/push.log"

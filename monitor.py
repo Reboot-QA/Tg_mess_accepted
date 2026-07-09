@@ -155,16 +155,28 @@ async def main() -> None:
         logger.info("新消息 [%s] %s: %s", chat_name, sender_name, text[:80])
         send_notification(push_cfg, title=title, content=content)
 
-    logger.info("正在启动 Telegram 监控...")
     logger.info("监控范围: %s", watch_chats or "全部可见聊天")
     logger.info("关键词过滤: %s", keywords or "无")
 
-    await client.start()
-    me = await client.get_me()
-    logger.info("已登录: %s (@%s)", me.first_name, me.username or "无用户名")
-    logger.info("监控运行中，按 Ctrl+C 停止")
+    retry_delay = int(app_cfg.get("reconnect_delay_seconds", 10))
+    while True:
+        try:
+            logger.info("正在启动 Telegram 监控...")
+            await client.start()
+            me = await client.get_me()
+            logger.info("已登录: %s (@%s)", me.first_name, me.username or "无用户名")
+            logger.info("监控运行中，按 Ctrl+C 停止")
 
-    await client.run_until_disconnected()
+            await client.run_until_disconnected()
+            logger.warning("Telegram 连接已断开")
+        except Exception:
+            logger.exception("监控运行异常")
+        finally:
+            if client.is_connected():
+                await client.disconnect()
+
+        logger.warning("%d 秒后尝试重连...", retry_delay)
+        await asyncio.sleep(retry_delay)
 
 
 if __name__ == "__main__":
