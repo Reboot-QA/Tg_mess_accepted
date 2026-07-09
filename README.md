@@ -2,9 +2,7 @@
 
 监听 Telegram 新消息，推送到 **企业微信 / Server酱 / PushPlus**。
 
-支持 **Linux 服务器**（推荐）与 **Windows 无影云桌面**。
-
----
+支持 **Linux 服务器** 部署。
 
 ---
 
@@ -28,7 +26,7 @@ docker compose build
 
 ### 3. 首次 Telegram 登录
 
-**方式 A**：复制已有 session（Windows/Linux 已登录过）
+**方式 A**：复制已有 session
 
 ```bash
 mkdir -p data/sessions
@@ -73,7 +71,7 @@ telegram:
   proxy:
     enabled: true
     type: "socks5"
-    host: "host.docker.internal"   # Mac/Windows Docker
+    host: "host.docker.internal"   # Docker Desktop
     port: 1080
 ```
 
@@ -117,7 +115,7 @@ nano config.yaml   # 或 vim config.yaml
 按提示输入手机号、验证码、两步验证密码。  
 成功后生成 `telegram_session.session`。
 
-> **免交互技巧**：若已在 Windows 登录过，把 `telegram_session.session` 复制到 Linux 同目录即可跳过验证码。
+> **免交互技巧**：若已在其他环境登录过，把 `telegram_session.session` 复制到服务器同目录即可跳过验证码。
 
 ### 4. 测试推送
 
@@ -156,16 +154,6 @@ telegram:
 
 ---
 
-## Windows 无影云桌面
-
-```bat
-start.bat              # 启动
-test_push.bat          # 测试推送
-install_autostart.bat  # 开机自启（管理员）
-```
-
----
-
 ## 推送方式
 
 | provider | 说明 | 费用 |
@@ -187,18 +175,17 @@ push:
 
 ## 文件说明
 
-| 文件 | Docker | Linux | Windows |
-|------|--------|-------|---------|
-| `Dockerfile` | 镜像构建 | - | - |
-| `docker-compose.yml` | 编排配置 | - | - |
-| `docker/setup.sh` | 初始化 data 目录 | - | - |
-| `monitor.py` | 主程序 | 主程序 | 主程序 |
-| `install.sh` | - | 安装依赖 | - |
-| `start.sh` / `start.bat` | - | 启动 | 启动 |
-| `test_push.sh` / `test_push.bat` | `docker compose --profile test` | 测试推送 | 测试推送 |
-| `install_service.sh` | - | systemd 自启 | - |
-| `install_autostart.bat` | - | - | 计划任务自启 |
-| `list_chats.py` | 查看群 ID | 查看群 ID | 查看群 ID |
+| 文件 | Docker | Linux |
+|------|--------|-------|
+| `Dockerfile` | 镜像构建 | - |
+| `docker-compose.yml` | 编排配置 | - |
+| `docker/setup.sh` | 初始化 data 目录 | - |
+| `monitor.py` | 主程序 | 主程序 |
+| `install.sh` | - | 安装依赖 |
+| `start.sh` | - | 启动 |
+| `test_push.sh` | `docker compose --profile test` | 测试推送 |
+| `install_service.sh` | - | systemd 自启 |
+| `list_chats.py` | 查看群 ID | 查看群 ID |
 
 ---
 

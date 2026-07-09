@@ -1,4 +1,4 @@
-"""Telegram 消息监控 -> 推送到微信/企业微信。支持 Linux 服务器与 Windows 无影云桌面 7x24 运行。"""
+"""Telegram 消息监控 -> 推送到微信/企业微信。支持 Linux 服务器 7x24 运行。"""
 
 from __future__ import annotations
 
