@@ -135,7 +135,7 @@ async def main() -> None:
         chat_id = event.chat_id
 
         if not should_push(chat_id, cooldown):
-            logger.debug("跳过推送（冷却中）: %s", chat_name)
+            logger.debug("跳过推送（冷却中）")
             return
 
         title = f"Telegram: {chat_name}"
@@ -152,7 +152,6 @@ async def main() -> None:
                 f"**内容**: {text[:500]}"
             )
 
-        logger.info("新消息 [%s] %s: %s", chat_name, sender_name, text[:80])
         send_notification(push_cfg, title=title, content=content)
 
     logger.info("监控范围: %s", watch_chats or "全部可见聊天")

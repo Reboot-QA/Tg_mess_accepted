@@ -31,7 +31,7 @@ def send_pushplus(
         response.raise_for_status()
         result = response.json()
         if result.get("code") == 200:
-            logger.info("PushPlus 推送成功: %s", title)
+            logger.info("PushPlus 推送成功")
             return True
 
         logger.error("PushPlus 推送失败: %s", result.get("msg", result))

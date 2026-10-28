@@ -44,7 +44,7 @@ def send_serverchan(cfg: dict, title: str, content: str) -> bool:
         response.raise_for_status()
         result = response.json()
         if result.get("code") == 0:
-            logger.info("Server酱 推送成功: %s", title)
+            logger.info("Server酱 推送成功")
             return True
 
         logger.error("Server酱 推送失败: %s", result.get("message", result))
@@ -78,7 +78,7 @@ def send_wecom(cfg: dict, title: str, content: str) -> bool:
         response.raise_for_status()
         result = response.json()
         if result.get("errcode") == 0:
-            logger.info("企业微信 推送成功: %s", title)
+            logger.info("企业微信 推送成功")
             return True
 
         logger.error("企业微信 推送失败: %s", result.get("errmsg", result))
