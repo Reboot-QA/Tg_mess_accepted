@@ -2,6 +2,8 @@
 set -e
 
 mkdir -p /app/data/logs /app/data/sessions
+# Telethon 需可写 session（含 .session-journal）；宿主机权限不对会导致 readonly database
+chmod -R u+rwX /app/data/sessions /app/data/logs 2>/dev/null || true
 
 if [ ! -f /app/data/config.yaml ]; then
   echo "错误: 未找到 /app/data/config.yaml"

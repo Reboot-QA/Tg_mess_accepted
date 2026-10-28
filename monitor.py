@@ -103,6 +103,17 @@ def should_push(chat_id: int, cooldown: int) -> bool:
     return True
 
 
+async def get_chat_name(event) -> str:
+    chat = getattr(event, "chat", None)
+    if chat is not None:
+        return getattr(chat, "title", None) or getattr(chat, "first_name", None) or "私聊"
+    try:
+        chat = await event.get_chat()
+        return getattr(chat, "title", None) or getattr(chat, "first_name", None) or "私聊"
+    except Exception:
+        return f"聊天 {event.chat_id}"
+
+
 async def get_sender_name(event) -> str:
     sender = await event.get_sender()
     if sender is None:
@@ -141,8 +152,7 @@ async def main() -> None:
         if not match_keywords(text, keywords):
             return
 
-        chat = await event.get_chat()
-        chat_name = getattr(chat, "title", None) or getattr(chat, "first_name", "私聊")
+        chat_name = await get_chat_name(event)
         sender_name = await get_sender_name(event)
         chat_id = event.chat_id
 
