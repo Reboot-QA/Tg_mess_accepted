@@ -13,7 +13,7 @@ RUN apt-get update \
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY monitor.py notifier.py pushplus.py list_chats.py test_push.py ./
+COPY monitor.py notifier.py pushplus.py log_crypto.py decrypt_logs.py list_chats.py test_push.py ./
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 

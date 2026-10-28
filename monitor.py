@@ -12,6 +12,7 @@ import yaml
 from telethon import TelegramClient, events
 from telethon.tl.types import Message
 
+from log_crypto import EncryptedFileHandler
 from notifier import send_notification
 
 ROOT = Path(__file__).resolve().parent
@@ -20,18 +21,29 @@ CONFIG_PATH = ROOT / "config.yaml"
 _last_push_at: dict[int, float] = {}
 
 
-def setup_logging(log_file: str) -> None:
+def setup_logging(log_file: str, app_cfg: dict | None = None) -> None:
+    app_cfg = app_cfg or {}
     log_path = ROOT / log_file
     log_path.parent.mkdir(parents=True, exist_ok=True)
 
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[
-            logging.FileHandler(log_path, encoding="utf-8"),
-            logging.StreamHandler(sys.stdout),
-        ],
-    )
+    fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+    handlers: list[logging.Handler] = [logging.StreamHandler(sys.stdout)]
+
+    enc_cfg = app_cfg.get("log_encrypt") or {}
+    if enc_cfg.get("enabled"):
+        secret = (enc_cfg.get("key") or "").strip()
+        if not secret or secret == "your_log_encryption_key":
+            print("已启用 app.log_encrypt，请配置有效的 app.log_encrypt.key")
+            sys.exit(1)
+        file_handler: logging.Handler = EncryptedFileHandler(log_path, secret)
+    else:
+        file_handler = logging.FileHandler(log_path, encoding="utf-8")
+
+    file_handler.setFormatter(fmt)
+    handlers[0].setFormatter(fmt)
+    handlers.append(file_handler)
+
+    logging.basicConfig(level=logging.INFO, handlers=handlers)
 
 
 def load_config() -> dict:
@@ -108,7 +120,7 @@ async def main() -> None:
         push_cfg = {"provider": "pushplus", "pushplus": push_cfg}
     app_cfg = config.get("app", {})
 
-    setup_logging(app_cfg.get("log_file", "logs/push.log"))
+    setup_logging(app_cfg.get("log_file", "logs/push.log"), app_cfg)
     logger = logging.getLogger(__name__)
 
     watch_chats = tg_cfg.get("watch_chats") or None

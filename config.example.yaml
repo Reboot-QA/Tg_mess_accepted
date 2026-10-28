@@ -39,3 +39,7 @@ app:
   reconnect_delay_seconds: 10
   log_file: "logs/push.log"
   # Docker 部署请改为: "data/logs/push.log"
+  # 磁盘日志加密（push.log 中为 ENC: 密文；docker compose logs 仍为明文）
+  log_encrypt:
+    enabled: false
+    key: "your_log_encryption_key"
